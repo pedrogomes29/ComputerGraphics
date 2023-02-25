@@ -68,6 +68,6 @@ export class MyScene extends CGFscene {
 
     if (this.displayAxis) this.axis.display();
 
-    //this.tangram.display();
+    this.tangram.display();
   }
 }
