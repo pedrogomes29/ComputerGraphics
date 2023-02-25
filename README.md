@@ -1,10 +1,10 @@
 # CG 2022/2023
 
-## Group T0xG0y
+## Group T08G10
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201901010 | ...                |
-| Jane Doe         | 201901011 | ...                |
+| Pedro Gomes         | 202006322 | up202006322@up.pt                |
+| Rui Pires        | 202008252 | up202008252@up.pt                |
 
 ----
 
