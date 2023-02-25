@@ -63,14 +63,11 @@ export class MyScene extends CGFscene {
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
-    // Draw axis
-    if (this.displayAxis) this.axis.display();
-
     this.setDefaultAppearance();
     this.pushMatrix();
 
     if (this.displayAxis) this.axis.display();
 
-    this.tangram.display();
+    //this.tangram.display();
   }
 }
