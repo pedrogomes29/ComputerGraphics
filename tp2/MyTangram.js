@@ -112,5 +112,6 @@ export class MyTangram extends CGFobject {
     this.scene.translate((3 * Math.sqrt(2)) / 2, -Math.sqrt(2), 0, 0);
     this.scene.rotate((-3 * Math.PI) / 4, 0, 0, 1);
     this.triangle.display();
+
   }
 }

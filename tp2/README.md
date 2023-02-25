@@ -11,3 +11,10 @@
 - In exercise 3 we had to think a lot and also do some mathemathics to get the correct values for all the translations and rotations matrices.
 
 ![Screenshot 1](screenshots/cg-t08g10-tp2-1.png)
+
+**MyUnitCube**
+- In this exercise, the hardest part was thinking about the order of the points in the indices array
+- After having the cube, the translation required to put the cube in the correct position was pretty straight forward
+
+![Screenshot 2](screenshots/cg-t08g10-tp2-2.png)
+
