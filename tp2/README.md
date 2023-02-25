@@ -18,3 +18,9 @@
 
 ![Screenshot 2](screenshots/cg-t08g10-tp2-2.png)
 
+**MyUnitCubeQuad**
+- In this exercise, we had to create a cube with Quads instead of triangles.
+- We found this exercise to be really funny because we could use only rotations on the various axis to only one quad and form the cube that way.
+
+![Screenshot 3](screenshots/cg-t08g10-tp2-3.png)
+
