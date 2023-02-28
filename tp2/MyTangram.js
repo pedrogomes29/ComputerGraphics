@@ -64,6 +64,11 @@ export class MyTangram extends CGFobject {
       1,
     ]; //translação de sqrt(2)/2 no sentido negativo do y
 
+
+    this.scene.translate(5,0,5);
+    this.scene.rotate(-Math.PI/2,1,0,0);
+    this.scene.pushMatrix();
+
     this.scene.multMatrix(translationMatrix);
     this.scene.multMatrix(rotationMatrix);
     this.diamond.display();
@@ -112,6 +117,8 @@ export class MyTangram extends CGFobject {
     this.scene.translate((3 * Math.sqrt(2)) / 2, -Math.sqrt(2), 0, 0);
     this.scene.rotate((-3 * Math.PI) / 4, 0, 0, 1);
     this.triangle.display();
+
+    this.scene.popMatrix();
 
   }
 }

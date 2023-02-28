@@ -71,9 +71,11 @@ export class MyScene extends CGFscene {
     this.applyViewMatrix();
 
     this.setDefaultAppearance();
+    this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor)
     this.pushMatrix();
 
     if (this.displayAxis) this.axis.display();
+
 
     this.tangram.display();
 
@@ -81,5 +83,5 @@ export class MyScene extends CGFscene {
     //this.unitCube.display();
     //this.quad.display();
     this.unitCubeQuad.display();
-  }
+    }
 }
