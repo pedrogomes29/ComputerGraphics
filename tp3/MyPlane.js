@@ -60,7 +60,6 @@ export class MyPlane extends CGFobject {
             this.normals.push(0, 0, 1);
         }
 
-        console.log(this.normals)
         this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
         this.initGLBuffers();
     }
