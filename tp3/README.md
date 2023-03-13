@@ -24,5 +24,11 @@
 
 ![Screenshot 3](screenshots/cg-t08g10-tp3-3.png)
 
+**Part3**
+
+- We didn't have much trouble with this part, since it was just a simpler version of the previous part.
+- It was fun noticing how this different shading method made sides look more circular, because in this case, the normals of the vertices are different between vertices of the same side, and the normals in other points of that same side are called using an interpolation.
+
+![Screenshot 4](screenshots/cg-t08g10-tp3-4.png)
 
 
