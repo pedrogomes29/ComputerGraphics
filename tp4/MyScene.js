@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
 import { MyQuad } from "./MyQuad.js";
 import { MyTangram } from "./MyTangram.js";
+import { MyUnitCubeQuad } from "./MyUnitCubeQuad.js";
 
 /**
  * MyScene
@@ -31,6 +32,18 @@ export class MyScene extends CGFscene {
         this.tangram = new MyTangram(this);
         this.tangramMaterial = new CGFappearance(this);
         this.tangramMaterial.loadTexture('images/tangram.png');
+
+        this.mineSideMaterial = new CGFappearance(this);
+        this.mineSideMaterial.loadTexture('images/mineSide.png');
+
+
+        this.mineTopMaterial = new CGFappearance(this);
+        this.mineTopMaterial.loadTexture('images/mineTop.png');
+
+        this.mineBottomMaterial = new CGFappearance(this);
+        this.mineBottomMaterial.loadTexture('images/mineBottom.png'); 
+
+        this.cube = new MyUnitCubeQuad(this, this.mineSideMaterial, this.mineSideMaterial, this.mineSideMaterial, this.mineSideMaterial, this.mineTopMaterial, this.mineBottomMaterial);
 
         //------ Applied Material
         this.quadMaterial = new CGFappearance(this);
@@ -124,13 +137,15 @@ export class MyScene extends CGFscene {
         // Uncomment next line for NEAREST when magnifying, or 
         // add a checkbox in the GUI to alternate in real time
         
-        // this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
         if(this.displayQuad)
             this.quad.display();
 
         // ---- END Primitive drawing section
-        this.tangramMaterial.apply();
+        //this.tangramMaterial.apply();
 
-        this.tangram.display();
+        //this.tangram.display();
+        
+        this.cube.display();
     }
 }

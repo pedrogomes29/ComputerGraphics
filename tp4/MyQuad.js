@@ -27,6 +27,9 @@ export class MyQuad extends CGFobject {
 			1, 3, 2
 		];
 
+		this.texCoords =[0,1,    1,1,       0,0,    1,0];
+
+
 		//Facing Z positive
 		this.normals = [
 			0, 0, 1,
