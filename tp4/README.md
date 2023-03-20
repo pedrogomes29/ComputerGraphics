@@ -13,3 +13,5 @@
 ### Applying textures to the cube composed of 6 planes
 
 - No major issues here, we just had to apply the texture to each plane, and uncomment the line of code in the scene class, to apply nearest filtering.
+
+![Figure 2](screenshots/cg-t08g10-tp4-2.png)
