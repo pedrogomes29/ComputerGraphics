@@ -1,7 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { MyPlane } from "./MyPlane.js";
 import { MyPanorama } from "./MyPanorama.js";
-
+import { MyBird } from "./MyBird.js"
 /**
  * MyScene
  * @constructor
@@ -27,18 +27,41 @@ export class MyScene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this,30);
     //Objects connected to MyInterface
-    this.displayAxis = true;
+    this.displayAxis = false;
     this.displayNormals = false;
     this.scaleFactor = 1;
 
     this.enableTextures(true);
 
-this.texture = new CGFtexture(this, "images/terrain.jpg");
-this.earthTexture = new CGFtexture(this, "images/earth.jpg");
-this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg");
-this.appearance = new CGFappearance(this);
-this.panorama = new MyPanorama(this, this.panoramaTexture);
+    this.texture = new CGFtexture(this, "images/terrain.jpg");
+    this.earthTexture = new CGFtexture(this, "images/earth.jpg");
+    this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg");
+    this.appearance = new CGFappearance(this);
+    this.panorama = new MyPanorama(this, this.panoramaTexture);
+    this.bird = new MyBird(this);
 
+  }
+  
+  hexToRgbA(hex)
+  {
+      var ret;
+      //either we receive a html/css color or a RGB vector
+      if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+          ret=[
+              parseInt(hex.substring(1,3),16).toPrecision()/255.0,
+              parseInt(hex.substring(3,5),16).toPrecision()/255.0,
+              parseInt(hex.substring(5,7),16).toPrecision()/255.0,
+              1.0
+          ];
+      }
+      else
+          ret=[
+              hex[0].toPrecision()/255.0,
+              hex[1].toPrecision()/255.0,
+              hex[2].toPrecision()/255.0,
+              1.0
+          ];
+      return ret;
   }
   initLights() {
     this.lights[0].setAmbient(1.0,1.0,1.0,1.0);
@@ -72,7 +95,7 @@ this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.applyViewMatrix();
 
     // Draw axis
-    //if (this.displayAxis) this.axis.display();
+    if (this.displayAxis) this.axis.display();
 
     // ---- BEGIN Primitive drawing section
 
@@ -84,6 +107,7 @@ this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.rotate(-Math.PI/2.0,1,0,0);
     //this.plane.display();
     this.panorama.display();
+    this.bird.display();
     this.popMatrix();
 
     // ---- END Primitive drawing section
