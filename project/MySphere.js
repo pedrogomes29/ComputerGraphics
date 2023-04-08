@@ -5,11 +5,12 @@ import { CGFobject} from "../lib/CGF.js";
  * @param scene - Reference to MyScene object
  */
 export class MySphere extends CGFobject {
-    constructor(scene, slices, stacks)
+    constructor(scene, slices, stacks,inverted=false)
     {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
+        this.inverted = inverted;
         this.initBuffers();
     }
     
@@ -32,7 +33,10 @@ export class MySphere extends CGFobject {
     
                 this.vertices.push(x,y,z);
                 const normalizationOfNormal = Math.sqrt(radius*radius+z*z);
-                this.normals.push(x/normalizationOfNormal,y/normalizationOfNormal,z/normalizationOfNormal)
+                if(this.inverted)
+                    this.normals.push(-x/normalizationOfNormal,-y/normalizationOfNormal,-z/normalizationOfNormal)
+                else
+                    this.normals.push(x/normalizationOfNormal,y/normalizationOfNormal,z/normalizationOfNormal)
                 
                 const phi = Math.acos(z)
                 const u = (Math.PI-theta) / (2 * Math.PI)
@@ -41,13 +45,19 @@ export class MySphere extends CGFobject {
 
     
                 if(i>0 && j>0){
-                    const upper_right = (i-1)*(this.stacks+1)+j; // adjust the index calculation
-                    const upper_left = i*(this.stacks+1)+j; // adjust the index calculation
-                    const bottom_right = (i-1)*(this.stacks+1)+j-1; // adjust the index calculation
-                    const bottom_left = i*(this.stacks+1)+j-1; // adjust the index calculation
-    
-                    this.indices.push(bottom_left,upper_left,upper_right)
-                    this.indices.push(bottom_right,bottom_left,upper_right)            
+                    const upper_right = (i-1)*(this.stacks+1)+j;
+                    const upper_left = i*(this.stacks+1)+j; 
+                    const bottom_right = (i-1)*(this.stacks+1)+j-1; 
+                    const bottom_left = i*(this.stacks+1)+j-1;
+                    
+                    if(this.inverted){
+                        this.indices.push(bottom_left,upper_left,upper_right)
+                        this.indices.push(bottom_right,bottom_left,upper_right)   
+                    }
+                    else{
+                        this.indices.push(upper_right,upper_left,bottom_left)
+                        this.indices.push(bottom_left,bottom_right,upper_right)     
+                    }
                 }
             }
         }
