@@ -5,6 +5,7 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyQuad } from "./MyQuad.js";
 import { MyWing } from "./MyWing.js";
 import { MySphere } from "./MySphere.js";
+import { MyCilinder } from "./MyCylinder.js";
 /**
  * MyBird
  * @constructor
@@ -16,7 +17,7 @@ export class MyBird extends CGFobject {
     super(scene);
     this.scene = scene;
     this.nose = new MyCone(scene,4,20);
-    this.upperBody = new MyUnitCube(scene);
+    this.upperBody = new MyCilinder(scene,100,100);
     this.lowerBody = new MyCone(scene,4,20);
     this.eye = new MySphere(scene,100,100);
     this.leftWing = new MyWing(scene,false)
@@ -32,6 +33,7 @@ export class MyBird extends CGFobject {
     this.updateMaterial(this.noseMaterial,"#b0903d");
     this.upperBodyMaterial = new CGFappearance(this.scene);
     this.updateMaterial(this.upperBodyMaterial,"#008081");
+    this.upperBodyMaterial.setSpecular(0,0,0,1);
     this.lowerBodyMaterial = new CGFappearance(this.scene);
     this.updateMaterial(this.lowerBodyMaterial,"#fa8128");
     this.eyeMaterial = new CGFappearance(this.scene);
@@ -52,7 +54,7 @@ export class MyBird extends CGFobject {
   display() {
     this.scene.translate(0,3,0)
     this.scene.pushMatrix();
-    this.scene.scale(1,0.5,0.5)
+    this.scene.scale(1.2,0.3,0.3)
     this.scene.rotate(-Math.PI/2,0,0,1)
     this.noseMaterial.apply();
     this.nose.display();
@@ -60,8 +62,8 @@ export class MyBird extends CGFobject {
     this.scene.popMatrix();
     this.scene.pushMatrix();
 
-    this.scene.scale(2,2,2)
-    this.scene.translate(-0.5,0,0);
+    this.scene.scale(2,1,1)
+    this.scene.rotate(Math.PI/2,0,0,1)
     this.upperBodyMaterial.apply();
     this.upperBody.display();
 
@@ -85,10 +87,15 @@ export class MyBird extends CGFobject {
 
     this.scene.popMatrix();
     this.scene.pushMatrix();
+  
     
-    this.scene.translate(-3.8,-2,0);
-    this.scene.rotate(-Math.PI/3.3,0,0,1);
-    this.scene.scale(0.75,0.75,0.75);
+    this.scene.translate(-4,-1.5,-0.5)
+    this.scene.scale(1.5,1/(2*Math.sqrt(2)),1/(2*Math.sqrt(2)))
+    this.scene.rotate(-Math.PI/4,0,0,1)
+    this.scene.rotate(-Math.PI/2,0,1,0)
+    this.scene.rotate(-Math.PI/2,1,0,0)
+    this.scene.rotate(Math.PI/4,0,0,1)
+    this.scene.translate(1,-1,0)
     this.tailMaterial.apply();
     this.tail.display();
 
@@ -112,7 +119,7 @@ export class MyBird extends CGFobject {
     this.scene.pushMatrix();
     
     this.scene.translate(-3.25,-0.25,0);
-    this.scene.scale(1.25,1.25,1.25)
+    this.scene.scale(1.25,1.25,2)
     this.leftWing.display();
 
     this.scene.popMatrix();
