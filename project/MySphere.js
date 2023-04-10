@@ -5,12 +5,13 @@ import { CGFobject} from "../lib/CGF.js";
  * @param scene - Reference to MyScene object
  */
 export class MySphere extends CGFobject {
-    constructor(scene, slices, stacks,inverted=false)
+    constructor(scene, slices, stacks,inverted=false,scale=1)
     {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
         this.inverted = inverted;
+        this.scale = scale;
         this.initBuffers();
     }
     
@@ -72,11 +73,9 @@ export class MySphere extends CGFobject {
         this.initNormalVizBuffers();
       }
 
-      display(){
-        this.scene.popMatrix();
-        this.scene.pushMatrix();    
+      display(){  
         this.scene.rotate(-Math.PI/2,1,0,0);
-        this.scene.scale(200,200,200,1);
+        this.scene.scale(this.scale,this.scale,this.scale,1);
         super.display();
         this.scene.popMatrix();
         this.scene.pushMatrix(); 

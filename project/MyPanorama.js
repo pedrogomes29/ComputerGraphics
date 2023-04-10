@@ -11,7 +11,7 @@ export class MyPanorama{
     constructor(scene, texture){
         this.scene = scene;
         this.texture = texture;
-        this.sphere = new MySphere(this.scene, 200, 200, true);
+        this.sphere = new MySphere(this.scene, 200, 200, true, 200);
         this.material = new CGFappearance(this.scene);
         this.material.setTexture(this.texture);
         this.material.setTextureWrap('REPEAT', 'REPEAT');
@@ -25,6 +25,8 @@ export class MyPanorama{
     display(){
         this.scene.translate(this.scene.camera.position.x,this.scene.camera.position.y,this.scene.camera.position.z)
         this.material.apply();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
         this.sphere.display();
     }
 }

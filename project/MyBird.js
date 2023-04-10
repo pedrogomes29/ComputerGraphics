@@ -3,7 +3,8 @@ import { MyCone } from "./MyCone.js";
 import { MyUnitCube } from "./MyUnitCube.js";
 import { MyTriangle } from "./MyTriangle.js";
 import { MyQuad } from "./MyQuad.js";
-
+import { MyWing } from "./MyWing.js";
+import { MySphere } from "./MySphere.js";
 /**
  * MyBird
  * @constructor
@@ -17,11 +18,10 @@ export class MyBird extends CGFobject {
     this.nose = new MyCone(scene,4,20);
     this.upperBody = new MyUnitCube(scene);
     this.lowerBody = new MyCone(scene,4,20);
-    this.eye = new MyUnitCube(scene);
-    this.leftWingSquare = new MyQuad(scene);
-    this.leftWingTriangle = new MyTriangle(scene);
-    this.rightWingSquare = new MyQuad(scene);
-    this.rightWingTriangle = new MyTriangle(scene);
+    this.eye = new MySphere(scene,100,100);
+    this.leftWing = new MyWing(scene,false)
+    this.rightWing = new MyWing(scene,true)
+    this.hair = new MyTriangle(scene);
     this.tail = new MyTriangle(scene);
     this.initMaterials();
   }
@@ -29,15 +29,18 @@ export class MyBird extends CGFobject {
 
   initMaterials(){
     this.noseMaterial = new CGFappearance(this.scene);
-    this.updateMaterial(this.noseMaterial,"#FFFF00");
-    this.bodyMaterial = new CGFappearance(this.scene);
-    this.updateMaterial(this.bodyMaterial,"#008081");
-    this.wingsMaterial = new CGFappearance(this.scene);
-    this.updateMaterial(this.wingsMaterial,"#0147ab");
+    this.updateMaterial(this.noseMaterial,"#b0903d");
+    this.upperBodyMaterial = new CGFappearance(this.scene);
+    this.updateMaterial(this.upperBodyMaterial,"#008081");
+    this.lowerBodyMaterial = new CGFappearance(this.scene);
+    this.updateMaterial(this.lowerBodyMaterial,"#fa8128");
     this.eyeMaterial = new CGFappearance(this.scene);
-    this.updateMaterial(this.eyeMaterial,"#333333");
+    this.updateMaterial(this.eyeMaterial,"#000000");
+    this.eyeMaterial.setSpecular(0,0,0,1);
     this.tailMaterial = new CGFappearance(this.scene);
-    this.updateMaterial(this.tailMaterial,"#d4af37");
+    this.updateMaterial(this.tailMaterial,"#b0903d");
+    this.hairMaterial = new CGFappearance(this.scene);
+    this.updateMaterial(this.hairMaterial,"#439946");
   }
 
   updateMaterial(material,hex){
@@ -52,31 +55,48 @@ export class MyBird extends CGFobject {
     this.scene.scale(1,0.5,0.5)
     this.scene.rotate(-Math.PI/2,0,0,1)
     this.noseMaterial.apply();
-    //this.nose.display();
+    this.nose.display();
 
     this.scene.popMatrix();
     this.scene.pushMatrix();
 
     this.scene.scale(2,2,2)
     this.scene.translate(-0.5,0,0);
-    this.bodyMaterial.apply();
+    this.upperBodyMaterial.apply();
     this.upperBody.display();
+
+    this.scene.popMatrix();
+    this.scene.pushMatrix();
+    this.scene.translate(-0.75,1.5,0);
+    this.scene.scale(0.5,0.5,0.5);
+    this.scene.rotate(0,0,0,1);
+    this.hairMaterial.apply();
+    this.hair.display();
 
     
     this.scene.popMatrix();
     this.scene.pushMatrix();
 
-    this.scene.translate(-1.75,0,0);
+    this.scene.translate(-1.5,0.12,0);
     this.scene.rotate(Math.PI/2 + Math.PI/6,0,0,1)
     this.scene.scale(1,4,1);
-    this.bodyMaterial.apply();
+    this.lowerBodyMaterial.apply();
     this.lowerBody.display();
 
     this.scene.popMatrix();
     this.scene.pushMatrix();
     
+    this.scene.translate(-3.8,-2,0);
+    this.scene.rotate(-Math.PI/3.3,0,0,1);
+    this.scene.scale(0.75,0.75,0.75);
+    this.tailMaterial.apply();
+    this.tail.display();
+
+    this.scene.popMatrix();
+    this.scene.pushMatrix();
+    
     this.scene.translate(-0.75,0.5,1);
-    this.scene.scale(0.5,0.5,0.5);
+    this.scene.scale(0.25,0.25,0.25);
     this.eyeMaterial.apply();
     this.eye.display();
 
@@ -84,53 +104,23 @@ export class MyBird extends CGFobject {
     this.scene.pushMatrix();
     
     this.scene.translate(-0.75,0.5,-1);
-    this.scene.scale(0.5,0.5,0.5);
+    this.scene.scale(0.25,0.25,0.25);
     this.eyeMaterial.apply();
     this.eye.display();
 
+    this.scene.popMatrix();
+    this.scene.pushMatrix();
     
-    this.scene.popMatrix();
-    this.scene.pushMatrix();
-
-    this.scene.translate(-1.75,-1.5,1.5);
-    this.scene.rotate(-7*Math.PI/12,1,0,0)
-    this.wingsMaterial.apply();
-    this.leftWingSquare.display();
+    this.scene.translate(-3.25,-0.25,0);
+    this.scene.scale(1.25,1.25,1.25)
+    this.leftWing.display();
 
     this.scene.popMatrix();
     this.scene.pushMatrix();
 
-    //this.scene.translate(-1.75,-1.5,2.5);
-
-    this.scene.rotate(Math.PI/4,0,1,0)
-    this.scene.rotate(-5*Math.PI/12,1,0,0)
-    this.scene.scale(0.5,0.5,0.5)
-    this.wingsMaterial.apply();
-    this.leftWingTriangle.display();
-    
+    this.rightWing.display();
 
     this.scene.popMatrix();
-    this.scene.pushMatrix();
-    this.scene.translate(-1.75,-1.5,-1.5);
-    this.scene.rotate(7*Math.PI/12,1,0,0)
-    this.wingsMaterial.apply();
-    this.rightWingSquare.display();
-
-    this.scene.popMatrix();
-    this.scene.pushMatrix();
-
-    this.scene.translate(-1.75,-1.5,-1.5);
-    this.scene.rotate(-Math.PI/6,0,1,0)
-    this.scene.rotate(-5*Math.PI/12,1,0,0)
-    this.scene.scale(0.5,0.5,0.5)
-    this.wingsMaterial.apply();
-    this.leftWingTriangle.display();
-
-    this.scene.popMatrix();
-    this.scene.pushMatrix();
-
-    this.tailMaterial.apply();
-    this.tail.display();
   }
 }
 
