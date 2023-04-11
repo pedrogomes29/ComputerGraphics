@@ -38,8 +38,9 @@ export class MyScene extends CGFscene {
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg");
     this.appearance = new CGFappearance(this);
     this.panorama = new MyPanorama(this, this.panoramaTexture);
-    this.bird = new MyBird(this);
+    this.bird = new MyBird(this,0,0,3,0,3);
 
+    this.setUpdatePeriod(50)
   }
   
   hexToRgbA(hex)
@@ -83,6 +84,11 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
+
+  update(t){
+    this.bird.update(t);
+  }
+
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
@@ -105,8 +111,9 @@ export class MyScene extends CGFscene {
     this.translate(0,-100,0);
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
-    //this.plane.display();
+
     this.panorama.display();
+
     this.bird.display();
     this.popMatrix();
 
