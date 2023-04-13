@@ -38,8 +38,8 @@ export class MyScene extends CGFscene {
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg");
     this.appearance = new CGFappearance(this);
     this.panorama = new MyPanorama(this, this.panoramaTexture);
-    this.bird = new MyBird(this,0,0,3,0,3);
-
+    this.bird = new MyBird(this,0,0,3,0,0);
+    this.speedFactor = 1
     this.setUpdatePeriod(50)
   }
   
@@ -65,16 +65,23 @@ export class MyScene extends CGFscene {
       return ret;
   }
   initLights() {
-    this.lights[0].setAmbient(1.0,1.0,1.0,1.0);
+    this.lights[0].setDiffuse(0.7,0.7,0.7,1.0);
+    this.lights[0].setSpecular(0.4,0.4,0.4,1.0);
     this.lights[0].enable();
     this.lights[0].update();
+    this.lights[1].setAmbient(0.5,0.5,0.5,1.0);
+    this.lights[1].setDiffuse(0.5,0.5,0.5,1.0);
+    this.lights[1].setSpecular(0.4,0.4,0.4,1.0);
+    this.lights[1].enable();
+    this.lights[1].update();
+    this.lights[1].setPosition(0,5,3);
   }
   initCameras() {
     this.camera = new CGFcamera(
       1.9,
       0.1,
       1000,
-      vec3.fromValues(0.1, 0.1, 0.1),
+      vec3.fromValues(3, 4, 3),
       vec3.fromValues(0, 0, 0)
     );
   }
@@ -84,9 +91,42 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
-
+  checkKeys() {
+    var text="Keys pressed: ";
+    var keysPressed=false;
+    if (this.gui.isKeyPressed("KeyA")) {
+      text+="A";
+      keysPressed=true;
+      this.bird.turn(0.1);
+    }
+    if (this.gui.isKeyPressed("KeyD")) {
+      text+="D";
+      keysPressed=true;
+      this.bird.turn(-0.1);
+    }
+    if (this.gui.isKeyPressed("KeyW")) {
+      text+="W";
+      keysPressed=true;
+      this.bird.accelerate(0.3);
+    }
+    if (this.gui.isKeyPressed("KeyS")) {
+      text+="S";
+      keysPressed=true;
+      this.bird.accelerate(-0.3);
+    }
+    if (this.gui.isKeyPressed("KeyR")) {
+      text+="R";
+      keysPressed=true;
+      this.bird.reset();
+    }
+    if (keysPressed)
+      console.log(text);
+  }
   update(t){
     this.bird.update(t);
+    this.checkKeys();
+    this.bird.setSpeedFactor(this.speedFactor);
+    this.bird.scaleFactor = this.scaleFactor
   }
 
   display() {
@@ -113,7 +153,6 @@ export class MyScene extends CGFscene {
     this.rotate(-Math.PI/2.0,1,0,0);
 
     this.panorama.display();
-
     this.bird.display();
     this.popMatrix();
 
