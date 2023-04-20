@@ -2,6 +2,8 @@ import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } fr
 import { MyPlane } from "./MyPlane.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyBird } from "./MyBird.js"
+import { MyTerrain } from "./MyTerrain.js"
+
 /**
  * MyScene
  * @constructor
@@ -36,11 +38,18 @@ export class MyScene extends CGFscene {
     this.texture = new CGFtexture(this, "images/terrain.jpg");
     this.earthTexture = new CGFtexture(this, "images/earth.jpg");
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg");
+    this.terrainTexture = new CGFtexture(this, "images/terrain.jpg");
+    this.heightMap = new CGFtexture(this, "images/heightmap_low_center.jpg");
     this.appearance = new CGFappearance(this);
     this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.bird = new MyBird(this,0,0,3,0,0);
+    this.terrain = new MyTerrain(this)
     this.speedFactor = 1
     this.setUpdatePeriod(50)
+
+    this.shader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+    this.shader.setUniformsValues({ terrainTexture: 1 });
+    this.shader.setUniformsValues({ heightMap: 2 });
   }
   
   hexToRgbA(hex)
@@ -143,8 +152,9 @@ export class MyScene extends CGFscene {
     // Draw axis
     if (this.displayAxis) this.axis.display();
 
-    // ---- BEGIN Primitive drawing section
 
+    // ---- BEGIN Primitive drawing section
+    console.log(this.activeShader)
     this.pushMatrix();
     this.setAmbient(1, 1, 1, 1);
     this.appearance.apply();
@@ -156,6 +166,12 @@ export class MyScene extends CGFscene {
     this.bird.display();
     this.popMatrix();
 
+    this.setActiveShader(this.shader);
+    this.pushMatrix();
+    this.terrainTexture.bind(1);
+    this.heightMap.bind(2);
+    this.terrain.display();
+    this.setActiveShader(this.defaultShader);
     // ---- END Primitive drawing section
   }
 }

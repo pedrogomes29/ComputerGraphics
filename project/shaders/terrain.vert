@@ -12,18 +12,15 @@ uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
 
 varying vec2 vTextureCoord;
-uniform sampler2D waterTexture;
-uniform sampler2D waterMap;
-uniform float timeFactor;
-varying float verticalOffset;
-varying float animationOffset;
+uniform sampler2D terrainTexture;
+uniform sampler2D heightMap;
+varying float z;
 
 
 void main() {
-	animationOffset = timeFactor/100.0;
-    verticalOffset = texture2D(waterMap, vec2(0,animationOffset) + aTextureCoord).b / 20.0;
+    float verticalOffset = texture2D(heightMap, aTextureCoord).b;
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition.xy, aVertexPosition.z + verticalOffset, 1.0);
-
+	z = verticalOffset + aVertexPosition.z;
 	vTextureCoord = aTextureCoord;
-
 }
+
