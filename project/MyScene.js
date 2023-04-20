@@ -40,6 +40,8 @@ export class MyScene extends CGFscene {
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg");
     this.terrainTexture = new CGFtexture(this, "images/terrain.jpg");
     this.heightMap = new CGFtexture(this, "images/heightmap_low_center.jpg");
+    this.altimetryTexture = new CGFtexture(this, "images/altimetry.png");
+
     this.appearance = new CGFappearance(this);
     this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.bird = new MyBird(this,0,0,3,0,0);
@@ -50,6 +52,8 @@ export class MyScene extends CGFscene {
     this.shader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
     this.shader.setUniformsValues({ terrainTexture: 1 });
     this.shader.setUniformsValues({ heightMap: 2 });
+    this.shader.setUniformsValues({ altimetryTexture: 3 });
+
   }
   
   hexToRgbA(hex)
@@ -154,22 +158,27 @@ export class MyScene extends CGFscene {
 
 
     // ---- BEGIN Primitive drawing section
-    console.log(this.activeShader)
-    this.pushMatrix();
+
     this.setAmbient(1, 1, 1, 1);
     this.appearance.apply();
-    this.translate(0,-100,0);
-    this.scale(400,400,400);
-    this.rotate(-Math.PI/2.0,1,0,0);
 
+    
+    this.pushMatrix();
     this.panorama.display();
-    this.bird.display();
-    this.popMatrix();
 
+
+    this.popMatrix();
+    this.pushMatrix();
+    this.bird.display();
+
+
+    this.popMatrix();
     this.setActiveShader(this.shader);
     this.pushMatrix();
+
     this.terrainTexture.bind(1);
     this.heightMap.bind(2);
+    this.altimetryTexture.bind(3);
     this.terrain.display();
     this.setActiveShader(this.defaultShader);
     // ---- END Primitive drawing section
