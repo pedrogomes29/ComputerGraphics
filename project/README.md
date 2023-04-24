@@ -28,3 +28,16 @@
 
 ![Screenshot 3](screenshots/cg-t08g10-project-3.png)
 ![Screenshot 4](screenshots/cg-t08g10-project-4.png)
+
+
+### 4. Terreno
+
+- Esta etapa do projeto era bastante parecida com a TP5, como tal não tivemos grandes dificuldades. Há uma grande diferença de altura na margem da zona plana, e nota-se uma mancha laranja nesta margem 
+
+- Tiramos 3 screenshots que permitem ver diferentes perspectivas do terreno com a ave em cima do lago. É possivel ver a influencia da cor da altimetria que usamos com um peso de 30%.
+
+![Screenshot 5](screenshots/cg-t08g10-project-5.png)
+
+![Screenshot 6](screenshots/cg-t08g10-project-6.png)
+
+![Screenshot 7](screenshots/cg-t08g10-project-7.png)
