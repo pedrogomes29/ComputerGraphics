@@ -3,7 +3,8 @@ import { MyPlane } from "./MyPlane.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyBird } from "./MyBird.js"
 import { MyTerrain } from "./MyTerrain.js"
-
+import { MyEggHandler } from "./MyEggHandler.js";
+import { MyNest } from "./MyNest.js";
 /**
  * MyScene
  * @constructor
@@ -44,11 +45,13 @@ export class MyScene extends CGFscene {
 
     this.appearance = new CGFappearance(this);
     this.panorama = new MyPanorama(this, this.panoramaTexture);
-    this.bird = new MyBird(this,0,0,3,0,0);
+    this.eggTexture = new CGFtexture(this, "images/egg.jpg");
+    this.eggHandler = new MyEggHandler(this, this.eggTexture);
+    this.nest = new MyNest(this);
+    this.bird = new MyBird(this,0,-40,15,-15,0,this.eggHandler, this.nest);
     this.terrain = new MyTerrain(this)
     this.speedFactor = 1
-    this.setUpdatePeriod(50)
-
+    this.setUpdatePeriod(5)
     this.shader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
     this.shader.setUniformsValues({ terrainTexture: 1 });
     this.shader.setUniformsValues({ heightMap: 2 });
@@ -94,8 +97,8 @@ export class MyScene extends CGFscene {
       1.9,
       0.1,
       1000,
-      vec3.fromValues(3, 4, 3),
-      vec3.fromValues(0, 0, 0)
+      vec3.fromValues(-3,3,-3),
+      vec3.fromValues(-4, -4, -4)
     );
   }
   setDefaultAppearance() {
@@ -110,12 +113,12 @@ export class MyScene extends CGFscene {
     if (this.gui.isKeyPressed("KeyA")) {
       text+="A";
       keysPressed=true;
-      this.bird.turn(0.1);
+      this.bird.turn(0.02);
     }
     if (this.gui.isKeyPressed("KeyD")) {
       text+="D";
       keysPressed=true;
-      this.bird.turn(-0.1);
+      this.bird.turn(-0.02);
     }
     if (this.gui.isKeyPressed("KeyW")) {
       text+="W";
@@ -131,6 +134,19 @@ export class MyScene extends CGFscene {
       text+="R";
       keysPressed=true;
       this.bird.reset();
+    }
+    if (this.gui.isKeyPressed("KeyP")) {
+      text+="P";
+      keysPressed=true;
+      if(!this.bird.diving && !this.bird.pickingUpEgg){
+        this.bird.diving = true;
+        this.bird.goingDown = true;
+      }
+    }
+    if (this.gui.isKeyPressed("KeyO")) {
+      text+="O";
+      keysPressed=true;
+      this.bird.dropEgg();
     }
     if (keysPressed)
       console.log(text);
@@ -159,10 +175,11 @@ export class MyScene extends CGFscene {
 
     // ---- BEGIN Primitive drawing section
 
+    
     this.setAmbient(1, 1, 1, 1);
     this.appearance.apply();
 
-    
+
     this.pushMatrix();
     this.panorama.display();
 
@@ -170,6 +187,12 @@ export class MyScene extends CGFscene {
     this.popMatrix();
     this.pushMatrix();
     this.bird.display();
+
+    this.eggHandler.display();
+
+    this.popMatrix();
+    this.pushMatrix();
+    this.nest.display();
 
 
     this.popMatrix();
@@ -182,5 +205,17 @@ export class MyScene extends CGFscene {
     this.terrain.display();
     this.setActiveShader(this.defaultShader);
     // ---- END Primitive drawing section
+
+    const distance = 15;
+    const birdPos = this.bird.getPosition();
+    const birdAngle = this.bird.getAngle();
+    const camPosX = birdPos.x - Math.sin(birdAngle) * distance;
+    const camPosY = 25;
+    const camPosZ = birdPos.z - Math.cos(birdAngle) * distance;
+    const camTarget = vec3.fromValues(birdPos.x, 25, birdPos.z);
+
+    //this.camera.setPosition(vec3.fromValues(camPosX, camPosY, camPosZ));
+    this.camera.setTarget(camTarget);
+  
   }
 }

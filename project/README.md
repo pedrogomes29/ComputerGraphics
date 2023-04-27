@@ -32,7 +32,7 @@
 
 ### 4. Terreno
 
-- Esta etapa do projeto era bastante parecida com a TP5, como tal não tivemos grandes dificuldades. Há uma grande diferença de altura na margem da zona plana, e nota-se uma mancha laranja nesta margem 
+- Esta etapa do projeto era bastante parecida com a TP5, como tal não tivemos grandes dificuldades. Há uma grande diferença de altura na margem da zona plana, e nota-se uma mancha laranja nesta margem devido à altimetria. No entanto, consideramos que estes defeitos são consequências de ter uma zona plana.
 
 - Tiramos 3 screenshots que permitem ver diferentes perspectivas do terreno com a ave em cima do lago. É possivel ver a influencia da cor da altimetria que usamos com um peso de 30%.
 
