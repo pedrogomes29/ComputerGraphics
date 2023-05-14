@@ -5,7 +5,8 @@ import { MyBird } from "./MyBird.js"
 import { MyTerrain } from "./MyTerrain.js"
 import { MyEggHandler } from "./MyEggHandler.js";
 import { MyNest } from "./MyNest.js";
-import { MyBillBoard } from "./MyBillBoard.js";
+import { MyTreeGroupPatch } from "./MyTreeGroupPatch.js";
+import { MyTreeRowPatch } from "./MyTreeRowPatch.js";
 /**
  * MyScene
  * @constructor
@@ -52,7 +53,8 @@ export class MyScene extends CGFscene {
     this.nest = new MyNest(this);
     this.bird = new MyBird(this,0,-40,15,-15,0,this.eggHandler, this.nest);
     this.terrain = new MyTerrain(this)
-    this.billboard = new MyBillBoard(this)
+    this.treeGroupPatch = new MyTreeGroupPatch(this);
+    this.treeRowPatch = new MyTreeRowPatch(this);
     this.speedFactor = 1
     this.setUpdatePeriod(5)
     this.shader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
@@ -203,7 +205,8 @@ export class MyScene extends CGFscene {
     this.popMatrix();
     this.pushMatrix();
     this.nest.display();
-    this.billboard.display(-110,11,-90)
+    this.treeGroupPatch.display();
+    this.treeRowPatch.display();
 
     this.popMatrix();
     this.setActiveShader(this.shader);

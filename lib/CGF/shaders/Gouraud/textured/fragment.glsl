@@ -16,6 +16,8 @@ void main() {
 	if (uUseTexture)
 	{
 		vec4 textureColor = texture(uSampler, vTextureCoord);
+		if (textureColor.a < 1.0)
+			discard;  // Descartar fragmentos não completamente opacos
 		fragColor = textureColor * vFinalColor;
 	}
 	else
