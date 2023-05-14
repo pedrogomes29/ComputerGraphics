@@ -31,6 +31,7 @@ export class MyScene extends CGFscene {
     this.plane = new MyPlane(this,30);
     //Objects connected to MyInterface
     this.displayAxis = false;
+    this.followBird = true;
     this.displayNormals = false;
     this.scaleFactor = 1;
 
@@ -42,7 +43,7 @@ export class MyScene extends CGFscene {
     this.terrainTexture = new CGFtexture(this, "images/terrain.jpg");
     this.heightMap = new CGFtexture(this, "images/heightmap_low_center.jpg");
     this.altimetryTexture = new CGFtexture(this, "images/altimetry.png");
-
+    this.changedCamera = false
     this.appearance = new CGFappearance(this);
     this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.eggTexture = new CGFtexture(this, "images/egg.jpg");
@@ -214,8 +215,21 @@ export class MyScene extends CGFscene {
     const camPosZ = birdPos.z - Math.cos(birdAngle) * distance;
     const camTarget = vec3.fromValues(birdPos.x, 25, birdPos.z);
 
-    //this.camera.setPosition(vec3.fromValues(camPosX, camPosY, camPosZ));
-    this.camera.setTarget(camTarget);
-  
+    if(this.followBird){
+      this.changedCamera = false;
+      this.camera.setPosition(vec3.fromValues(camPosX, camPosY, camPosZ));
+      this.camera.setTarget(camTarget);
+    }
+    else if(!this.changedCamera){
+      this.camera = new CGFcamera(
+        1.9,
+        0.1,
+        1000,
+        vec3.fromValues(-60,10,-60),
+        vec3.fromValues(-4, -4, -4)
+      );
+      this.changedCamera = true;
+    }
+
   }
 }
