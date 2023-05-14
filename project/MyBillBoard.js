@@ -7,10 +7,19 @@ export class MyBillBoard extends CGFobject{
         this.scene = scene;
         this.quad = new MyQuad(scene);
         this.material = new CGFappearance(scene);
-        this.material.setTexture(new CGFtexture(scene, 'images/billboardtree.png'));
+        this.material.setAmbient(1, 1, 1, 1);
+        this.material.setDiffuse(1, 1, 1, 1);
+        this.material.setSpecular(1, 1, 1, 1);
+        this.material.setShininess(10);
+        this.textures = [];
+        this.textures.push(new CGFtexture(scene, 'images/bigtree.png'));
+        this.textures.push(new CGFtexture(scene, 'images/smalltree.png'));
+        this.textures.push(new CGFtexture(scene, 'images/billboardtree.png'));
+        // choose one of the textures at random
+        this.texture = this.textures[Math.floor(Math.random() * this.textures.length)];
+        this.material.setTexture(this.texture);
     }
     display(x,y,z){
-        
         let cameraPosition = this.scene.camera.position;
         let quadPosition = vec3.fromValues(x, y, z);
         
@@ -31,17 +40,15 @@ export class MyBillBoard extends CGFobject{
         quadVector[2] /= quadVectorLength;
         
         // Compute rotation angle and axis
-        let cosAngle = cameraVector[0] * quadVector[0] + cameraVector[1] * quadVector[1] + cameraVector[2] * quadVector[2];
-        let sinAngle = Math.sqrt(1 - cosAngle * cosAngle);
-        let axis = vec3.fromValues(
-          cameraVector[1] * quadVector[2] - cameraVector[2] * quadVector[1],
-          cameraVector[2] * quadVector[0] - cameraVector[0] * quadVector[2],
-          cameraVector[0] * quadVector[1] - cameraVector[1] * quadVector[0]
-        );
-        
+        let angle = Math.acos(vec3.dot(cameraVector, quadVector));
+        let axis = vec3.create();
+        vec3.cross(axis, cameraVector, quadVector);
         // Rotate the quad
-        this.scene.rotate(Math.acos(cosAngle), axis[0], axis[1], axis[2]);
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
         this.scene.translate(x, y, z);
+        this.scene.rotate(angle, axis[0], axis[1], axis[2]);
+        this.scene.scale(10, 10, 10);
         this.material.apply()
         this.quad.display();
         
