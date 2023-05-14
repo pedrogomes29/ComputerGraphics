@@ -87,14 +87,28 @@ export class MyBird extends CGFobject {
 
 
   collision(eggPosition){
-    const x = eggPosition.x
-    const z = eggPosition.z
-    return (1.7*(this.position.x-x))*(1.7*(this.position.x-x)) + (this.position.z-z)*(this.position.z-z) <= 1.7*1.7;
+    const eggX = eggPosition.x
+    const eggZ = eggPosition.z
+    const birdX = this.position.x + 1.2*this.scaleFactor*Math.sin(this.orientation)
+    const birdZ = this.position.z + 1.2*this.scaleFactor*Math.cos(this.orientation)
+    console.log(`Egg: x:${eggX} z:${eggZ}`)
+    console.log(`Bird: x:${this.position.x} z:${this.position.z}`)
+
+    if(birdX<eggX){
+      console.log(`Distance = ${(birdX-eggX)*(birdX-eggX)/(1.7*1.7) + (birdZ-eggZ)*(birdZ-eggZ)}`)
+      return ((birdX-eggX)*(birdX-eggX))/(1.7*1.7) + (birdZ-eggZ)*(birdZ-eggZ) <= 1;
+    }
+    else{
+      console.log(`Distance = ${(birdX-eggX)*(birdX-eggX)/(1.2*1.2) + (birdZ-eggZ)*(birdZ-eggZ)}`)
+      return ((birdX-eggX)*(birdX-eggX))/(1.2*1.2) + (birdZ-eggZ)*(birdZ-eggZ) <= 1;
+    }
   }
   nestCollision(nestPosition){
-    const x = nestPosition.x
-    const z = nestPosition.z
-    return ((this.position.x-x))*(this.position.x-x) + (this.position.z-z)*(this.position.z-z) <= 4*4;
+    const nestX = nestPosition.x
+    const nestZ = nestPosition.z
+    const birdX = this.position.x + 1.7*this.scaleFactor*Math.sin(this.orientation)
+    const birdZ = this.position.z + 1.7*this.scaleFactor*Math.cos(this.orientation)
+    return ((birdX-nestX))*(birdX-nestX) + (birdZ-nestZ)*(birdZ-nestZ) <= 4*4;
 
   }
   dropEgg(){
