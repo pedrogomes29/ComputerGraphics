@@ -83,32 +83,74 @@ export class MyBird extends CGFobject {
     material.setSpecular(1.0,1.0,1.0,1.0);
   }
 
+  getBirdBeak(){
+    const beakDistance = ((1.2+2)/3) * this.scaleFactor;
 
+    const beakX = this.position.x + beakDistance * Math.sin(this.orientation);
+    const beakZ = this.position.z + beakDistance * Math.cos(this.orientation);
+    console.log(`Bird: x:${this.position.x} z:${this.position.z}`)
+
+    return [beakX, beakZ];
+  }
 
 
   collision(eggPosition){
     const eggX = eggPosition.x
     const eggZ = eggPosition.z
-    const birdX = this.position.x + 1.2*this.scaleFactor*Math.sin(this.orientation)
-    const birdZ = this.position.z + 1.2*this.scaleFactor*Math.cos(this.orientation)
+    const [birdBeakX,birdBeakZ] = this.getBirdBeak()
     console.log(`Egg: x:${eggX} z:${eggZ}`)
-    console.log(`Bird: x:${this.position.x} z:${this.position.z}`)
+    console.log(`Bird Ponta do bico: x:${birdBeakX} z:${birdBeakZ}`)
 
-    if(birdX<eggX){
-      console.log(`Distance = ${(birdX-eggX)*(birdX-eggX)/(1.7*1.7) + (birdZ-eggZ)*(birdZ-eggZ)}`)
-      return ((birdX-eggX)*(birdX-eggX))/(1.7*1.7) + (birdZ-eggZ)*(birdZ-eggZ) <= 1;
+    if(birdBeakX<eggX){
+      console.log(`Distance = ${(birdBeakX-eggX)*(birdBeakX-eggX)/(1.7*1.7) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ)}`)
+      return ((birdBeakX-eggX)*(birdBeakX-eggX))/(1.7*1.7) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ) <= 1;
     }
     else{
-      console.log(`Distance = ${(birdX-eggX)*(birdX-eggX)/(1.2*1.2) + (birdZ-eggZ)*(birdZ-eggZ)}`)
-      return ((birdX-eggX)*(birdX-eggX))/(1.2*1.2) + (birdZ-eggZ)*(birdZ-eggZ) <= 1;
+      console.log(`Distance = ${(birdBeakX-eggX)*(birdBeakX-eggX)/(1.2*1.2) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ)}`)
+      return ((birdBeakX-eggX)*(birdBeakX-eggX))/(1.2*1.2) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ) <= 1;
     }
   }
   nestCollision(nestPosition){
     const nestX = nestPosition.x
     const nestZ = nestPosition.z
-    const birdX = this.position.x + 1.7*this.scaleFactor*Math.sin(this.orientation)
-    const birdZ = this.position.z + 1.7*this.scaleFactor*Math.cos(this.orientation)
-    return ((birdX-nestX))*(birdX-nestX) + (birdZ-nestZ)*(birdZ-nestZ) <= 4*4;
+    const [birdBeakX,birdBeakZ] = this.getBirdBeak()
+    const eggX = birdBeakX + 1.7*Math.sin(this.orientation)
+    const eggZ = birdBeakZ + 1.7*Math.cos(this.orientation)
+    const distBetweenCenters = Math.sqrt((eggX-nestX)*(eggX-nestX) + (eggZ-nestZ)*(eggZ-nestZ))
+
+    function distance(t,orientation) {
+      //egg - nest : vector nest->egg
+      // a*Math.cos(t) + Math.sin(t) : parametric equations of the ellipse (a = 1.7 or 1.2)
+      // (egg - nest) + a*Math.cos(t) + Math.sin(t) : vector from the center of the nest to any point in the ellipse
+      // this function returns the distance from the center of the nest to a point in the ellipse
+      let x
+      if(t%2*Math.PI<Math.PI/2 ||t%2*Math.PI> 3*Math.PI/2 )
+        x = eggX - nestX + 1.7 * Math.sin(orientation)*Math.sin(t);
+      else
+        x = eggX - nestX + 1.2 * Math.sin(orientation)*Math.cos(t);
+
+      const z = eggZ - nestZ + Math.cos(orientation)*Math.sin(t);
+      return Math.sqrt(x * x + z * z);
+    }
+
+    let centerToFurthestPointEllipse
+    if(nestX<eggX){
+      centerToFurthestPointEllipse = Math.sqrt(1.7*1.7+1)
+    }
+    else{
+      centerToFurthestPointEllipse = Math.sqrt(1.2*1.2+1)
+    }
+
+    if (distBetweenCenters + centerToFurthestPointEllipse < 4)
+      return true;
+    else{
+      let max_distance = -1
+      for(let t = 0;t<=2*Math.PI+0.001;t+=Math.PI/4){
+        max_distance = Math.max(max_distance,distance(t,this.orientation))
+      }
+      console.log(max_distance)
+      return max_distance<4;
+    }
 
   }
   dropEgg(){
@@ -228,15 +270,14 @@ export class MyBird extends CGFobject {
 
   display() {
     this.scene.translate(this.position.x,this.position.y,this.position.z)
-    this.scene.translate(0,0,-(2/3)*this.scaleFactor);
-    this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-    this.scene.scale(1/3,1/3,1/3)
+    this.scene.scale(this.scaleFactor/3, this.scaleFactor/3, this.scaleFactor/3);
     this.scene.rotate(-Math.PI/2+this.orientation,0,1,0)
     this.scene.translate(2,0,0)
     this.scene.pushMatrix();
     this.scene.scale(1.2,0.3,0.3)
     this.scene.rotate(-Math.PI/2,0,0,1)
     this.noseMaterial.apply();
+    
     this.nose.display();
 
     this.scene.popMatrix();
@@ -312,7 +353,7 @@ export class MyBird extends CGFobject {
     if(this.pickingUpEgg){
       this.scene.popMatrix();
       this.scene.pushMatrix();
-      this.scene.translate(3*0.3*this.scaleFactor+0.5,-0.5,0)
+      this.scene.translate(1.2 + 3*1.7/this.scaleFactor,0,0)
       this.scene.scale(3/this.scaleFactor,3/this.scaleFactor,3/this.scaleFactor)
       this.eggCarried.display();
     }

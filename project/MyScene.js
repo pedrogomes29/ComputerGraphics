@@ -163,7 +163,6 @@ export class MyScene extends CGFscene {
 
   display() {
     if(!this.followBird && !this.changedCamera){
-      console.log("Stop following bird");
       this.initCameras();
       this.changedCamera = true;
     }
