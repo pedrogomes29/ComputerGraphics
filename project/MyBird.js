@@ -110,6 +110,7 @@ export class MyBird extends CGFobject {
       return ((birdBeakX-eggX)*(birdBeakX-eggX))/(1.2*1.2) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ) <= 1;
     }
   }
+
   nestCollision(nestPosition){
     const nestX = nestPosition.x
     const nestZ = nestPosition.z
@@ -125,7 +126,7 @@ export class MyBird extends CGFobject {
       // this function returns the distance from the center of the nest to a point in the ellipse
       let x
       if(t%2*Math.PI<Math.PI/2 ||t%2*Math.PI> 3*Math.PI/2 )
-        x = eggX - nestX + 1.7 * Math.sin(orientation)*Math.sin(t);
+        x = eggX - nestX + 1.7 * Math.sin(orientation)*Math.cos(t);
       else
         x = eggX - nestX + 1.2 * Math.sin(orientation)*Math.cos(t);
 
@@ -147,9 +148,13 @@ export class MyBird extends CGFobject {
       let max_distance = -1
       for(let t = 0;t<=2*Math.PI+0.001;t+=Math.PI/4){
         max_distance = Math.max(max_distance,distance(t,this.orientation))
+        if(max_distance>4){
+          console.log(`No collison, max distance is at least ${max_distance}`)
+          return false;
+        }
       }
-      console.log(max_distance)
-      return max_distance<4;
+      console.log(`Collison, max distance is ${max_distance}`)
+      return true
     }
 
   }
