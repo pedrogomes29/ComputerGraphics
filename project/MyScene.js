@@ -144,8 +144,7 @@ export class MyScene extends CGFscene {
       text+="P";
       keysPressed=true;
       if(!this.bird.diving && !this.bird.pickingUpEgg){
-        this.bird.diving = true;
-        this.bird.goingDown = true;
+        this.bird.initializePickingUpMovment();
       }
     }
     if (this.gui.isKeyPressed("KeyO")) {
@@ -157,9 +156,9 @@ export class MyScene extends CGFscene {
       console.log(text);
   }
   update(t){
+    this.checkKeys();
     this.bird.update(t);
     this.eggHandler.update(t);
-    this.checkKeys();
     this.bird.setSpeedFactor(this.speedFactor);
     this.bird.scaleFactor = this.scaleFactor
   }

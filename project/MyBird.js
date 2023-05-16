@@ -16,7 +16,8 @@ import { MyNest } from "./MyNest.js";
  * */
 
 const VELOCITY_GOING_DOWN = -1;
-const VELOCITY_PICKING_UP_EGG = -4.6;
+const VELOCITY_PICKING_UP_EGG_UP = 4.6;
+const TERRAIN_HEIGHT = 10.4;
 
 export class MyBird extends CGFobject {
   constructor(scene,orientation,x,y,z,speed, eggHandler, nest) {
@@ -88,7 +89,6 @@ export class MyBird extends CGFobject {
 
     const beakX = this.position.x + beakDistance * Math.sin(this.orientation);
     const beakZ = this.position.z + beakDistance * Math.cos(this.orientation);
-    console.log(`Bird: x:${this.position.x} z:${this.position.z}`)
 
     return [beakX, beakZ];
   }
@@ -103,15 +103,11 @@ export class MyBird extends CGFobject {
     const eggX = eggPosition.x
     const eggZ = eggPosition.z
     const [birdBeakX,birdBeakZ] = this.getBirdBeak()
-    console.log(`Egg: x:${eggX} z:${eggZ}`)
-    console.log(`Bird Ponta do bico: x:${birdBeakX} z:${birdBeakZ}`)
 
     if(birdBeakX<eggX){
-      console.log(`Distance = ${(birdBeakX-eggX)*(birdBeakX-eggX)/(1.7*1.7) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ)}`)
       return ((birdBeakX-eggX)*(birdBeakX-eggX))/(1.7*1.7) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ) <= 1;
     }
     else{
-      console.log(`Distance = ${(birdBeakX-eggX)*(birdBeakX-eggX)/(1.2*1.2) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ)}`)
       return ((birdBeakX-eggX)*(birdBeakX-eggX))/(1.2*1.2) + (birdBeakZ-eggZ)*(birdBeakZ-eggZ) <= 1;
     }
   }
@@ -170,6 +166,15 @@ export class MyBird extends CGFobject {
     }
   }
 
+  initializePickingUpMovment(){
+    this.diving = true;
+    this.goingDown = true;
+    this.startOfMovement = this.time;
+    this.initial_y_picking_up = this.position.y;
+    this.velocity_picking_up_egg_down = TERRAIN_HEIGHT-this.position.y //divided by deltat=1
+  }
+
+
   update(t){
     this.offset = t-this.time
     this.time = t
@@ -201,16 +206,18 @@ export class MyBird extends CGFobject {
       if(this.time-this.startOfMovement > 1000){
         this.startOfMovement = this.time
         this.goingDown = !this.goingDown
-        if(this.goingDown) //means we just went up => finished picking up egg movement
+        if(this.goingDown){//means we just went up => finished picking up egg movement
           this.diving = false;
+          y = this.initial_y 
+        } 
       }
       
       if(this.diving){
         if(this.goingDown){
-          y = this.initial_y + VELOCITY_PICKING_UP_EGG*(this.time-this.startOfMovement)/1000
+          y = this.initial_y_picking_up + this.velocity_picking_up_egg_down*(this.time-this.startOfMovement)/1000
         }
         else{
-          y = 10.4 + (-VELOCITY_PICKING_UP_EGG)*(this.time-this.startOfMovement)/1000
+          y = TERRAIN_HEIGHT + (VELOCITY_PICKING_UP_EGG_UP)*(this.time-this.startOfMovement)/1000
         }
       }
     }
@@ -223,6 +230,7 @@ export class MyBird extends CGFobject {
     const x_offset = x_velocity_direction*x_and_z_velocity*(this.offset)/1000
     const z_offset = z_velocity_direction*x_and_z_velocity*(this.offset)/1000
 
+    console.log(y)
     this.position.setPosition(this.position.x+x_offset,y,this.position.z+z_offset)
     this.leftWing.update(t)
     this.rightWing.update(t)
