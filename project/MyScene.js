@@ -158,6 +158,7 @@ export class MyScene extends CGFscene {
   }
   update(t){
     this.bird.update(t);
+    this.eggHandler.update(t);
     this.checkKeys();
     this.bird.setSpeedFactor(this.speedFactor);
     this.bird.scaleFactor = this.scaleFactor
@@ -165,8 +166,8 @@ export class MyScene extends CGFscene {
 
   display() {
     if(!this.followBird && !this.changedCamera){
-      this.initCameras();
-      this.changedCamera = true;
+      this.camera.setPosition(vec3.fromValues(-60,10,-60))
+      this.changedCamera = true
     }
 
 

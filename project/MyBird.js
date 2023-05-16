@@ -92,7 +92,12 @@ export class MyBird extends CGFobject {
 
     return [beakX, beakZ];
   }
-
+  getEggPosition(){
+    const [birdBeakX,birdBeakZ] = this.getBirdBeak()
+    const eggX = birdBeakX + 1.7*Math.sin(this.orientation)
+    const eggZ = birdBeakZ + 1.7*Math.cos(this.orientation)
+    return [eggX,eggZ]
+  }
 
   collision(eggPosition){
     const eggX = eggPosition.x
@@ -111,12 +116,10 @@ export class MyBird extends CGFobject {
     }
   }
 
-  nestCollision(nestPosition){
+  nestCollision(nestPosition,radius){
     const nestX = nestPosition.x
     const nestZ = nestPosition.z
-    const [birdBeakX,birdBeakZ] = this.getBirdBeak()
-    const eggX = birdBeakX + 1.7*Math.sin(this.orientation)
-    const eggZ = birdBeakZ + 1.7*Math.cos(this.orientation)
+    const[eggX,eggZ] = this.getEggPosition()
     const distBetweenCenters = Math.sqrt((eggX-nestX)*(eggX-nestX) + (eggZ-nestZ)*(eggZ-nestZ))
 
     function distance(t,orientation) {
@@ -142,27 +145,27 @@ export class MyBird extends CGFobject {
       centerToFurthestPointEllipse = Math.sqrt(1.2*1.2+1)
     }
 
-    if (distBetweenCenters + centerToFurthestPointEllipse < 4)
+    if (distBetweenCenters + centerToFurthestPointEllipse < radius)
       return true;
     else{
       let max_distance = -1
       for(let t = 0;t<=2*Math.PI+0.001;t+=Math.PI/4){
         max_distance = Math.max(max_distance,distance(t,this.orientation))
-        if(max_distance>4){
-          console.log(`No collison, max distance is at least ${max_distance}`)
+        if(max_distance>radius){
           return false;
         }
       }
-      console.log(`Collison, max distance is ${max_distance}`)
       return true
     }
 
   }
   dropEgg(){
+    const nestPosition = new Position(-80,10.4,-60)//nest position
     if(!this.pickingUpEgg)
       return;
-    if (this.nestCollision(new Position(-80,10.4,-60))) //nest position
-    {
+    if (!this.nestCollision(nestPosition,4) && this.nestCollision(nestPosition,8)){
+      const [eggX,eggZ] = this.getEggPosition();
+      this.eggHandler.initializeMovement(new Position(eggX,this.position.y,eggZ),nestPosition)
       this.pickingUpEgg = false;
     }
   }
