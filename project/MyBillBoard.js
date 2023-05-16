@@ -26,7 +26,7 @@ export class MyBillBoard extends CGFobject{
         // Compute camera vector
         let cameraVector = vec3.create();
         cameraVector[0] = cameraPosition[0] - quadPosition[0];
-        cameraVector[1] = cameraPosition[1] - quadPosition[1];
+        cameraVector[1] = 0;
         cameraVector[2] = cameraPosition[2] - quadPosition[2];
         let cameraVectorLength = Math.sqrt(cameraVector[0] * cameraVector[0] + cameraVector[1] * cameraVector[1] + cameraVector[2] * cameraVector[2]);
         cameraVector[0] /= cameraVectorLength;
@@ -40,9 +40,9 @@ export class MyBillBoard extends CGFobject{
         quadVector[2] /= quadVectorLength;
         
         // Compute rotation angle and axis
-        let angle = Math.acos(vec3.dot(cameraVector, quadVector));
+        let angle = Math.acos(vec3.dot(vec3.fromValues(0, 0, 1), cameraVector));
         let axis = vec3.create();
-        vec3.cross(axis, cameraVector, quadVector);
+        vec3.cross(axis,vec3.fromValues(0, 0, 1), cameraVector);
         // Rotate the quad
         this.scene.popMatrix();
         this.scene.pushMatrix();
