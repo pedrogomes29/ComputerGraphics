@@ -54,7 +54,12 @@ export class MyEggHandler{
     reset(){
         this.eggBeingPickedUp = -1;
         this.eggBeingDropped = -1;
-        this.positions = this.initialPositions;
+        this.positions = []
+        for (let i=0;i<this.initialPositions.length;i++){
+            const position = this.initialPositions[i]
+            this.positions.push(new Position(position.x,position.y,position.z))
+        }
+        console.log(this.positions)
     }
 
     initializeMovement(initialPosition){

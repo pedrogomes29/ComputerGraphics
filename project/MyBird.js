@@ -5,9 +5,7 @@ import { MyWing } from "./MyWing.js";
 import { MySphere } from "./MySphere.js";
 import { MyCilinder } from "./MyCylinder.js";
 import { Position } from "./Position.js";
-import { MyEggHandler } from "./MyEggHandler.js";
 import { MyBirdEgg } from "./MyBirdEgg.js";
-import { MyNest } from "./MyNest.js";
 
 /**
  * MyBird
