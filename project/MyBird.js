@@ -43,7 +43,7 @@ export class MyBird extends CGFobject {
     this.rightWing = new MyWing(scene,true,speed,this.time,this.startOfMovement);
     this.hair = new MyTriangle(scene);
     this.tail = new MyTriangle(scene);
-    this.initial_y = y;
+    this.initial_position = new Position(this.position.x,this.position.y,this.position.z);
     this.eggTexture = new CGFtexture(this.scene, "images/egg.jpg");
     this.eggHandler = eggHandler;
     this.eggCarried = new MyBirdEgg(this.scene, this.eggTexture);
@@ -156,13 +156,13 @@ export class MyBird extends CGFobject {
 
   }
   dropEgg(){
-    const nestPosition = new Position(-80,10.4,-60)//nest position
+    const nestPosition = this.nest.getPosition();//nest position
     if(!this.pickingUpEgg)
       return;
     if (!this.nestCollision(nestPosition,4) && this.nestCollision(nestPosition,8)){
-      const [eggX,eggZ] = this.getEggPosition();
-      this.eggHandler.initializeMovement(new Position(eggX,this.position.y,eggZ),nestPosition)
       this.pickingUpEgg = false;
+      const [eggX,eggZ] = this.getEggPosition();
+      this.eggHandler.initializeMovement(new Position(eggX,this.position.y,eggZ))
     }
   }
 
@@ -170,7 +170,7 @@ export class MyBird extends CGFobject {
     this.diving = true;
     this.goingDown = true;
     this.startOfMovement = this.time;
-    this.initial_y_picking_up = this.position.y;
+    this.initial_y_picking_up = this.initial_position.y;
     this.velocity_picking_up_egg_down = TERRAIN_HEIGHT-this.position.y //divided by deltat=1
   }
 
@@ -187,10 +187,10 @@ export class MyBird extends CGFobject {
       }
 
       if(this.goingDown){
-        y = this.initial_y + VELOCITY_GOING_DOWN*(this.time-this.startOfMovement)/1000
+        y = this.initial_position.y + VELOCITY_GOING_DOWN*(this.time-this.startOfMovement)/1000
       }
       else{
-        y = (this.initial_y-0.5) + (-VELOCITY_GOING_DOWN)*(this.time-this.startOfMovement)/1000
+        y = (this.initial_position.y-0.5) + (-VELOCITY_GOING_DOWN)*(this.time-this.startOfMovement)/1000
       }
     }
     else{
@@ -208,7 +208,7 @@ export class MyBird extends CGFobject {
         this.goingDown = !this.goingDown
         if(this.goingDown){//means we just went up => finished picking up egg movement
           this.diving = false;
-          y = this.initial_y 
+          y = this.initial_position.y
         } 
       }
       
@@ -229,14 +229,12 @@ export class MyBird extends CGFobject {
 
     const x_offset = x_velocity_direction*x_and_z_velocity*(this.offset)/1000
     const z_offset = z_velocity_direction*x_and_z_velocity*(this.offset)/1000
-
-    console.log(y)
     this.position.setPosition(this.position.x+x_offset,y,this.position.z+z_offset)
     this.leftWing.update(t)
     this.rightWing.update(t)
   }
   reset(){
-    this.position.setPosition(0,this.initial_y,0);
+    this.position.setPosition(this.initial_position.x,this.initial_position.y,this.initial_position.z)
     this.orientation = 0
     this.speed = 0
     this.time = Date.now()
@@ -249,7 +247,6 @@ export class MyBird extends CGFobject {
     this.rightWing.reset(this.time,this.startOfMovement);
     this.diving = false;
     this.pickingUpEgg = false;
-    this.eggHandler.showEgg();
   }
 
   turn(v){
@@ -377,4 +374,5 @@ export class MyBird extends CGFobject {
 
   }
 }
+
 

@@ -25,7 +25,7 @@ export class MySphere extends CGFobject {
         this.texCoords = [];
     
         for(let i=0;i<=this.slices;i++){
-            for(let j=0;j<=this.stacks;j++){ // increase the number of stacks by one
+            for(let j=0;j<=this.stacks;j++){
                 const z = -1+2*(1/this.slices)*i;
                 const radius = Math.sqrt(1-z*z);
                 const theta = j*((2*Math.PI)/this.stacks);

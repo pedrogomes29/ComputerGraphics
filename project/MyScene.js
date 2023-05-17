@@ -7,10 +7,16 @@ import { MyEggHandler } from "./MyEggHandler.js";
 import { MyNest } from "./MyNest.js";
 import { MyTreeGroupPatch } from "./MyTreeGroupPatch.js";
 import { MyTreeRowPatch } from "./MyTreeRowPatch.js";
+import { Position } from "./Position.js";
+
 /**
  * MyScene
  * @constructor
  */
+
+const NEST_POSITION = new Position(-80.0, 10.4, -60.0)
+const BASE_HEIGHT = 0.4
+
 export class MyScene extends CGFscene {
   constructor() {
     super();
@@ -36,7 +42,7 @@ export class MyScene extends CGFscene {
     this.followBird = false;
     this.changedCamera = true;
     this.displayNormals = false;
-    this.scaleFactor = 1;
+    this.scaleFactor = 2.5;
 
     this.enableTextures(true);
 
@@ -47,11 +53,11 @@ export class MyScene extends CGFscene {
     this.heightMap = new CGFtexture(this, "images/heightmap_low_center.jpg");
     this.altimetryTexture = new CGFtexture(this, "images/altimetry.png");
     this.appearance = new CGFappearance(this);
-    this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.eggTexture = new CGFtexture(this, "images/egg.jpg");
-    this.eggHandler = new MyEggHandler(this, this.eggTexture);
-    this.nest = new MyNest(this);
-    this.bird = new MyBird(this,0,-40,15,-15,0,this.eggHandler, this.nest);
+    this.eggHandler = new MyEggHandler(this, this.eggTexture,NEST_POSITION,BASE_HEIGHT);
+    this.nest = new MyNest(this,NEST_POSITION,BASE_HEIGHT);
+    this.bird = new MyBird(this,0,NEST_POSITION.x,15,NEST_POSITION.z,0,this.eggHandler, this.nest);
+    this.panorama = new MyPanorama(this, this.panoramaTexture,this.bird.position);
     this.terrain = new MyTerrain(this)
     this.treeGroupPatch = new MyTreeGroupPatch(this);
     this.treeRowPatch = new MyTreeRowPatch(this);
@@ -139,6 +145,7 @@ export class MyScene extends CGFscene {
       text+="R";
       keysPressed=true;
       this.bird.reset();
+      this.eggHandler.reset();
     }
     if (this.gui.isKeyPressed("KeyP")) {
       text+="P";

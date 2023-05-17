@@ -8,7 +8,7 @@ import { CGFappearance } from "../lib/CGF.js";
  * @param texture - Reference to CGFtexture object
  * */
 export class MyPanorama{
-    constructor(scene, texture){
+    constructor(scene, texture,birdPosition){
         this.scene = scene;
         this.texture = texture;
         this.sphere = new MySphere(this.scene, 200, 200, true, 200);
@@ -20,11 +20,14 @@ export class MyPanorama{
         this.material.setSpecular(0,0,0,1)
         this.material.setAmbient(0,0,0,1)
         this.material.setShininess(0)
+        this.position = birdPosition //passed by reference so it automatically updates
 
     }
     display(){
+        this.scene.translate(this.position.x,this.position.y,this.position.z)
         this.material.apply();
         this.sphere.display();
 
     }
+
 }
