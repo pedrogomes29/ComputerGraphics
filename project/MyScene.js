@@ -57,7 +57,7 @@ export class MyScene extends CGFscene {
     this.eggHandler = new MyEggHandler(this, this.eggTexture,NEST_POSITION,BASE_HEIGHT);
     this.nest = new MyNest(this,NEST_POSITION,BASE_HEIGHT);
     this.bird = new MyBird(this,0,NEST_POSITION.x,15,NEST_POSITION.z,0,this.eggHandler, this.nest);
-    this.panorama = new MyPanorama(this, this.panoramaTexture,this.bird.position);
+    this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.terrain = new MyTerrain(this)
     this.treeGroupPatch = new MyTreeGroupPatch(this);
     this.treeRowPatch = new MyTreeRowPatch(this);
@@ -172,6 +172,7 @@ export class MyScene extends CGFscene {
 
   display() {
     if(!this.followBird && !this.changedCamera){
+      this.panorama.position = new Position(0,0,0)
       this.camera.setPosition(vec3.fromValues(-60,10,-60))
       this.changedCamera = true
     }
@@ -236,6 +237,7 @@ export class MyScene extends CGFscene {
     if(this.followBird){
       this.changedCamera = false;
       this.camera.setPosition(vec3.fromValues(camPosX, camPosY, camPosZ));
+      this.panorama.position = this.bird.position //passed by reference so it automatically updates
     }
     this.camera.setTarget(camTarget);
 
