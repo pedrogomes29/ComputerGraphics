@@ -1,6 +1,8 @@
 # CG 2022/2023
 
 ## Group T08G10
+- Pedro Gomes - up202006322
+- Rui Pires - up202008252
 
 ## Project
 
