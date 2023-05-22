@@ -59,6 +59,9 @@
 - Big tree: https://www.techmonkeybusiness.com/galleries/Texture_Galleries/Billboard_Trees/images/001-Bigtree1.png
 - Small elegant tree: https://sansarweb-media-production-w.akamaized.net/b20b4c09-b41b-4f87-aebe-267f41085845_800.png
 
+- Para o desalinhamento das árvores é calculado um offset random que varia pouco entre a sua posição inicial para que as arvores se pareçam naturalmente desalinhadas.
+- Tivemos um bocado de dificuldades com efeito billboard mas rapidamente as ultrapassamos.
+
 
 ![Screenshot 9](screenshots/cg-t08g10-project-9.png)
 
